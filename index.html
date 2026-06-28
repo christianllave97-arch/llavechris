@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Llave de Torneo</title>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <script type="text/javascript" src="https://me.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=P3sPV6ZXuPG2ZVFP2Hfif1lyVAd7eifsaVphrNQaZtOQ_GOSTsJYiEAF15J6VDnDDcwTnLIDIUZHhcoKzVrTBlStVS9-ez9fGqUiufaF02bSk2mIGyUISULm6eKlHOh9yOZWOY3ZVOUdmuLykdSIo4aXdfBF24aVB11jGAdy_zRHJ_NWa-koqpZh3W1hFvakHWBKTVhN35s8yIoseEiR81IjqA37EA3-PzDjWv-KZWsuycgMUUzUCDtZwpwg6hCiH_ZvA-0hK800SXNNO7gCS5mG0mmI4SIIEjwuZS3VHTZte_x2F_KqUZMRL2a0aB3gpue7NZ9cbmkkJRVgcwSUbg" charset="UTF-8"></script><style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: radial-gradient(circle at top, #102033, #071425 70%);
+      color: white;
+      font-family: Arial, Helvetica, sans-serif;
+      overflow-x: auto;
+    }
+
+    .titulo {
+      text-align: center;
+      color: #f7c600;
+      font-weight: bold;
+      letter-spacing: 2px;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+
+    .bracket {
+      display: flex;
+      justify-content: center;
+      align-items: stretch;
+      gap: 12px;
+      min-width: 1700px;
+      padding: 30px 25px;
+    }
+
+    .round {
+      width: 180px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .round-title {
+      color: #8b95a3;
+      font-size: 13px;
+      font-weight: bold;
+      letter-spacing: 1.5px;
+      margin-bottom: 25px;
+      text-transform: uppercase;
+    }
+
+    .match {
+      width: 100%;
+      background: rgba(3, 38, 35, 0.9);
+      border: 1px solid #006b3f;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 0 12px rgba(0, 255, 120, 0.12);
+      position: relative;
+    }
+
+    .match small {
+      display: block;
+      text-align: right;
+      padding: 5px 10px 0;
+      color: #7c8794;
+      font-size: 10px;
+    }
+
+    .team {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 10px;
+      color: #9ca6ad;
+      font-size: 13px;
+      font-weight: bold;
+      cursor: pointer;
+      min-height: 40px;
+    }
+
+    .team:hover {
+      background: rgba(0, 255, 120, 0.15);
+      color: white;
+    }
+
+    .team.seleccionado {
+      background: rgba(0, 105, 55, 0.45);
+      color: #5ff199;
+    }
+
+    .flag {
+      width: 28px;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .bandera {
+      width: 28px;
+      height: 20px;
+      object-fit: cover;
+    }
+
+    .check {
+      margin-left: auto;
+      color: #4cff88;
+    }
+
+    .gap-1 { gap: 14px; }
+    .gap-2 { gap: 88px; padding-top: 38px; }
+    .gap-3 { gap: 185px; padding-top: 132px; }
+    .gap-4 { gap: 380px; padding-top: 320px; }
+
+    .final-zone {
+      width: 230px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding-top: 120px;
+    }
+
+    .trophy {
+      font-size: 60px;
+      margin-bottom: 20px;
+    }
+
+    .final-title {
+      color: #f7c600;
+      font-weight: bold;
+      letter-spacing: 5px;
+      margin-bottom: 18px;
+    }
+
+    .final-card {
+      width: 165px;
+      border: 2px solid #b99000;
+      border-radius: 13px;
+      background: rgba(20, 39, 31, 0.95);
+      overflow: hidden;
+      box-shadow: 0 0 18px rgba(255, 204, 0, 0.25);
+    }
+
+    .versus {
+      text-align: center;
+      color: #f7c600;
+      font-size: 12px;
+      font-weight: bold;
+      padding: 10px;
+      letter-spacing: 2px;
+    }
+
+    .campeon {
+      margin-top: 20px;
+      text-align: center;
+      color: #f7c600;
+      font-weight: bold;
+      border: 1px solid #b99000;
+      border-radius: 10px;
+      padding: 10px;
+      width: 180px;
+      background: rgba(255, 204, 0, 0.08);
+    }
+
+    .left-lines .match::after {
+      content: "";
+      position: absolute;
+      right: -13px;
+      top: 50%;
+      width: 13px;
+      height: 1px;
+      background: #006b3f;
+    }
+
+    .right-lines .match::before {
+      content: "";
+      position: absolute;
+      left: -13px;
+      top: 50%;
+      width: 13px;
+      height: 1px;
+      background: #006b3f;
+    }
+
+
+    .panel-usuario {
+      width: 90%;
+      max-width: 720px;
+      margin: 20px auto;
+      padding: 18px;
+      background: rgba(3, 38, 35, 0.95);
+      border: 1px solid #006b3f;
+      border-radius: 15px;
+      box-shadow: 0 0 14px rgba(0, 255, 120, 0.16);
+    }
+
+    .panel-usuario label {
+      color: #f7c600;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .panel-usuario .nota {
+      color: #9ca6ad;
+      font-size: 13px;
+      margin-top: 8px;
+    }
+
+    .btn-guardar {
+      background: #f7c600;
+      border: none;
+      color: #071425;
+      font-weight: bold;
+    }
+
+    .btn-guardar:hover {
+      background: #ffd633;
+      color: #071425;
+    }
+
+    .btn-guardar:disabled {
+      background: #6f6f6f;
+      color: #ddd;
+      cursor: not-allowed;
+    }
+
+    .mensaje-guardar {
+      min-height: 24px;
+      font-weight: bold;
+      text-align: center;
+      margin-top: 12px;
+    }
+
+
+
+    
+
+    .pie {
+      width: 100%;
+      min-width: 1700px;
+      margin-top: 35px;
+      padding: 22px 15px;
+      background: rgba(3, 38, 35, 0.96);
+      border-top: 1px solid #006b3f;
+      box-shadow: 0 -4px 18px rgba(0, 255, 120, 0.12);
+      text-align: center;
+      color: #9ca6ad;
+    }
+
+    .pie-contenido {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .pie p {
+      margin: 4px 0;
+      font-size: 14px;
+      letter-spacing: 0.4px;
+    }
+
+    .pie .empresa {
+      color: #f7c600;
+      font-weight: bold;
+    }
+
+    .pie .autor {
+      color: #5ff199;
+      font-weight: bold;
+    }
+
+    .pie .autor span {
+      color: #ffffff;
+    }
+
+
+    @media (max-width: 768px) {
+      .bracket {
+        justify-content: flex-start;
+        padding: 20px;
+      }
+
+      .titulo {
+        font-size: 18px;
+      }
+
+      .pie {
+        min-width: 100%;
+        padding: 18px 10px;
+      }
+
+      .pie p {
+        font-size: 12px;
+      }
+
+      
+
+    }
+  </style>
+</head>
+
+<body>
+
+
+  <iframe src="https://live.turadiotv.com/cp/widgets/player/single/?p=8026" height="110" width="140%" scrolling="no" style="border:none;"></iframe>
+  <iframe src="https://live.turadiotv.com/cp/widgets/player/single/?p=8198" height="110" width="140%" scrolling="no" style="border:none;"></iframe>
+  <h3 class="titulo">POLLA COPA MUNDIAL2026</h3>
+  <h3 class="titulo">INMOBILIARIA VIRGEN DEL SOCAVÓN</h3>
+
+
+  <div class="panel-usuario">
+    <div class="row g-3 align-items-end">
+      <div class="col-md-8">
+        <label for="nombreCompleto">Nombre completo:</label>
+        <input type="text" id="nombreCompleto" class="form-control" placeholder="Ejemplo: Alan Brito" autocomplete="name">
+        <div class="nota">Complete su nombre, seleccione todos los ganadores hasta el campeón y guarde una sola vez. Realiza una captura de pantalla!!!</div>
+        <a href="https://wa.me/59171234567" target="_blank">
+  Enviar mensaje por WhatsApp
+</a>
+      </div>
+
+      <div class="col-md-4">
+        <button id="btnGuardar" class="btn btn-guardar w-100" onclick="guardarEnGoogleSheet()">
+          Guardar y enviar resultados
+        </button>
+      </div>
+    </div>
+
+    <div id="mensajeGuardar" class="mensaje-guardar"></div>
+  </div>
+
+  <div class="bracket">
+
+    <!-- IZQUIERDA DIECISEISAVOS -->
+    <div class="round gap-1 left-lines">
+      <div class="round-title">Dieciseisavos</div>
+
+      <div class="match">
+        <small>M74 &nbsp; 29 Jun · Foxborough</small>
+        <div class="team" onclick="seleccionarEquipo(this)" data-match="p1" data-target="octavo1a" data-name="Alemania" data-flag="https://flagcdn.com/w40/de.png">
+          <span class="flag"><img src="https://flagcdn.com/w40/de.png" class="bandera"></span> Alemania
+        </div>
+        <div class="team" onclick="seleccionarEquipo(this)" data-match="p1" data-target="octavo1a" data-name="Paraguay" data-flag="https://flagcdn.com/w40/py.png">
+          <span class="flag"><img src="https://flagcdn.com/w40/py.png" class="bandera"></span> Paraguay
+        </div>
+      </div>
+
+      <div class="match">
+        <small>M77 &nbsp; 30 Jun · East Rutherford</small>
+        <div class="team" onclick="seleccionarEquipo(this)" data-match="p2" data-target="octavo1b" data-name="Francia" data-flag="https://flagcdn.com/w40/fr.png">
+          <span class="flag"><img src="https://flagcdn.com/w40/fr.png" class="bandera"></span> Francia
+        </div>
+        <div class="team" onclick="seleccionarEquipo(this)" data-match="p2" data-target="octavo1b" data-name="Suecia" data-flag="https://flagcdn.com/w40/se.png">
+          <span class="flag"><img src="https://flagcdn.com/w40/se.png" class="bandera"></span> Suecia
+        </div>
+      </div>
+
+      <div class="match">
+        <small>M73 &nbsp; 28 Jun · Inglewood</small>
+        <div class="team" onclick="seleccionarEquipo(this)" data-match="p3" data-target="octavo2a" data-name="Sudáfrica" data-flag="https://flagcdn.com/w40/za.png">
+          <span class="flag"><img src="https://flagcdn.com/w40/za.png" class="bandera"></span> Sudáfrica
+        </div>
+        <div class="team" onclick="seleccionarEquipo(this)" data-match="p3" data-target="octavo2a" data-name="Canadá" data-flag="https://flagcdn.com/w40/ca.png">
+          <span class="flag"><img src="https://flagcdn.com/w40/ca.png" class="bandera"></span> Canadá
+        </div>
+      </div>
+
+      <div class="match">
+        <small>M75 &nbsp; 29 Jun · Guadalajara</small>
+        <div class="team" onclick="seleccionarEquipo(this)" data-match="p4" data-target="octavo2b" data-name="Países Bajos" data-flag="https://flagcdn.com/w40/nl.png">
+          <span class="flag"><img src="https://flagcdn.com/w40/nl.png" class="bandera"></span> Países Bajos
+        </div>
+        <div class="team" onclick="seleccionarEquipo(this)" data-match="p4" data-target="octavo2b" data-name="Marruecos" data-flag="https://flagcdn.com/w40/ma.png">
+          <span class="flag"><img src="https://flagcdn.com/w40/ma.png" class="bandera"></span> Marruecos
+        </div>
+      </div>
+
+      <div class="match">
+        <small>M83 &nbsp; 2 Jul · Toronto</small>
+        <div class="team" onclick="seleccionarEquipo(this)" data-match="p5" data-target="octavo3a" data-name="Portugal" data-flag="https://flagcdn.com/w40/pt.png">
+          <span class="flag"><img src="https://flagcdn.com/w40/pt.png" class="bandera"></span> Portugal
+        </div>
+        <div class="team" onclick="seleccionarEquipo(this)" data-match="p5" data-target="octavo3a" data-name="Croacia" data-flag="https://flagcdn.com/w40/hr.png">
+          <span class="flag"><img src="https://flagcdn.com/w40/hr.png" class="bandera"></span> Croacia
+        </div>
+      </div>
+
+      <div class="match">
+        <small>M84 &nbsp; 2 Jul · Inglewood</small>
+        <div class="team" onclick="seleccionarEquipo(this)" data-match="p6" data-target="octavo3b" data-name="España" data-flag="https://flagcdn.com/w40/es.png">
+          <span class="flag"><img src="https://flagcdn.com/w40/es.png" class="bandera"></span> España
+        </div>
+        <div class="team" onclick="seleccionarEquipo(this)" data-match="p6" data-target="octavo3b" data-name="Argelia" data-flag="https://flagcdn.com/w40/dz.png">
+          <span class="flag"><img src="https://flagcdn.com/w40/at.png" class="bandera"></span> Austria
+        </div>
+      </div>
+
+      <div class="match">
+        <small>M81 &nbsp; 1 Jul · Santa Clara</small>
+        <div class="team" onclick="seleccionarEquipo(this)" data-match="p7" data-target="octavo4a" data-name="EE. UU." data-flag="https://flagcdn.com/w40/us.png">
+          <span class="flag"><img src="https://flagcdn.com/w40/us.png" class="bandera"></span> EE. UU.
+        </div>
+        <div class="team" onclick="seleccionarEquipo(this)" data-match="p7" data-target="octavo4a" data-name="Bosnia y Herzegovina" data-flag="https://flagcdn.com/w40/ba.png">
+          <span class="flag"><img src="https://flagcdn.com/w40/ba.png" class="bandera"></span> Bosnia
+        </div>
+      </div>
+
+      <div class="match">
+        <small>M82 &nbsp; 1 Jul · Seattle</small>
+        <div class="team" onclick="seleccionarEquipo(this)" data-match="p8" data-target="octavo4b" data-name="Bélgica" data-flag="https://flagcdn.com/w40/be.png">
+          <span class="flag"><img src="https://flagcdn.com/w40/be.png" class="bandera"></span> Bélgica
+        </div>
+        <div class="team" onclick="seleccionarEquipo(this)" data-match="p8" data-target="octavo4b" data-name="Senegal" data-flag="https://flagcdn.com/w40/sn.png">
+          <span class="flag"><img src="https://flagcdn.com/w40/sn.png" class="bandera"></span> Senegal
+        </div>
+      </div>
+    </div>
+
+    <!-- IZQUIERDA OCTAVOS -->
+    <div class="round gap-2 left-lines">
+      <div class="round-title">Octavos</div>
+
+      <div class="match">
+        <small>M89 &nbsp; 4 Jul · Philadelphia</small>
+        <div class="team" id="octavo1a" onclick="seleccionarEquipo(this)" data-match="o1" data-target="cuarto1a">Seleccionar</div>
+        <div class="team" id="octavo1b" onclick="seleccionarEquipo(this)" data-match="o1" data-target="cuarto1a">Seleccionar</div>
+      </div><br><br><br><br>
+
+      <div class="match">
+        <small>M90 &nbsp; 4 Jul · Houston</small>
+        <div class="team" id="octavo2a" onclick="seleccionarEquipo(this)" data-match="o2" data-target="cuarto1b">Seleccionar</div>
+        <div class="team" id="octavo2b" onclick="seleccionarEquipo(this)" data-match="o2" data-target="cuarto1b">Seleccionar</div>
+      </div><br><br><br><br>
+
+      <div class="match">
+        <small>M93 &nbsp; 6 Jul · Arlington</small>
+        <div class="team" id="octavo3a" onclick="seleccionarEquipo(this)" data-match="o3" data-target="cuarto2a">Seleccionar</div>
+        <div class="team" id="octavo3b" onclick="seleccionarEquipo(this)" data-match="o3" data-target="cuarto2a">Seleccionar</div>
+      </div><br><br><br><br>
+
+      <div class="match">
+        <small>M94 &nbsp; 6 Jul · Seattle</small>
+        <div class="team" id="octavo4a" onclick="seleccionarEquipo(this)" data-match="o4" data-target="cuarto2b">Seleccionar</div>
+        <div class="team" id="octavo4b" onclick="seleccionarEquipo(this)" data-match="o4" data-target="cuarto2b">Seleccionar</div>
+      </div>
+    </div>
+
+    <!-- IZQUIERDA CUARTOS -->
+    <div class="round gap-3 left-lines">
+      <div class="round-title">Cuartos de final</div>
+
+      <div class="match">
+        <small>M97 &nbsp; 9 Jul · Foxborough</small>
+        <div class="team" id="cuarto1a" onclick="seleccionarEquipo(this)" data-match="c1" data-target="semi1a">Seleccionar</div>
+        <div class="team" id="cuarto1b" onclick="seleccionarEquipo(this)" data-match="c1" data-target="semi1a">Seleccionar</div>
+      </div><br><br><br><br><br><br><br><br><br><br><br><br>
+
+      <div class="match">
+        <small>M98 &nbsp; 10 Jul · Inglewood</small>
+        <div class="team" id="cuarto2a" onclick="seleccionarEquipo(this)" data-match="c2" data-target="semi1b">Seleccionar</div>
+        <div class="team" id="cuarto2b" onclick="seleccionarEquipo(this)" data-match="c2" data-target="semi1b">Seleccionar</div>
+      </div>
+    </div>
+
+    <!-- IZQUIERDA SEMIFINAL -->
+    <div class="round gap-4 left-lines">
+      <div class="round-title">Semifinales</div>
+
+      <div class="match">
+        <small>M101 &nbsp; 14 Jul · Arlington</small>
+        <div class="team" id="semi1a" onclick="seleccionarEquipo(this)" data-match="s1" data-target="finalA">Seleccionar</div>
+        <div class="team" id="semi1b" onclick="seleccionarEquipo(this)" data-match="s1" data-target="finalA">Seleccionar</div>
+      </div>
+    </div>
+
+    <!-- FINAL -->
+    <div class="final-zone">
+      <div class="round-title text-warning">Final</div>
+      <div class="trophy"><img src="https://panamericanworld.com/wp-content/uploads/2025/02/copa-mundial-fifa-2026-1080x675.jpg" alt=""></div>
+      <div class="final-title">FINAL</div>
+
+      <div class="final-card">
+        <small class="d-block text-center text-secondary mt-2">M104 &nbsp; 19 Jul · MetLife Stadium</small>
+        <div class="team" id="finalA" onclick="seleccionarEquipo(this)" data-match="final" data-target="campeon">Seleccionar</div>
+        <div class="versus">VS</div>
+        <div class="team" id="finalB" onclick="seleccionarEquipo(this)" data-match="final" data-target="campeon">Seleccionar</div>
+      </div>
+
+      <div class="campeon">
+        Campeón:
+        <div id="campeon">Seleccionar</div>
+      </div>
+    </div>
+
+    <!-- DERECHA SEMIFINAL -->
+    <div class="round gap-4 right-lines">
+      <div class="round-title">Semifinales</div>
+
+      <div class="match">
+        <small>M102 &nbsp; 15 Jul · Atlanta</small>
+        <div class="team" id="semi2a" onclick="seleccionarEquipo(this)" data-match="s2" data-target="finalB">Seleccionar</div>
+        <div class="team" id="semi2b" onclick="seleccionarEquipo(this)" data-match="s2" data-target="finalB">Seleccionar</div>
+      </div>
+    </div>
+
+    <!-- DERECHA CUARTOS -->
+    <div class="round gap-3 right-lines">
+      <div class="round-title">Cuartos de final</div>
+
+      <div class="match">
+        <small>M99 &nbsp; 11 Jul · Miami Gardens</small>
+        <div class="team" id="cuarto3a" onclick="seleccionarEquipo(this)" data-match="c3" data-target="semi2a">Seleccionar</div>
+        <div class="team" id="cuarto3b" onclick="seleccionarEquipo(this)" data-match="c3" data-target="semi2a">Seleccionar</div>
+      </div><br><br><br><br><br><br><br><br><br><br><br><br>
+
+      <div class="match">
+        <small>M100 &nbsp; 11 Jul · Kansas City</small>
+        <div class="team" id="cuarto4a" onclick="seleccionarEquipo(this)" data-match="c4" data-target="semi2b">Seleccionar</div>
+        <div class="team" id="cuarto4b" onclick="seleccionarEquipo(this)" data-match="c4" data-target="semi2b">Seleccionar</div>
+      </div>
+    </div>
+
+    <!-- DERECHA OCTAVOS -->
+    <div class="round gap-2 right-lines">
+      <div class="round-title">Octavos</div>
+
+      <div class="match">
+        <small>M91 &nbsp; 5 Jul · East Rutherford</small>
+        <div class="team" id="octavo5a" onclick="seleccionarEquipo(this)" data-match="o5" data-target="cuarto3a">Seleccionar</div>
+        <div class="team" id="octavo5b" onclick="seleccionarEquipo(this)" data-match="o5" data-target="cuarto3a">Seleccionar</div>
+      </div><br><br><br><br>
+
+      <div class="match">
+        <small>M92 &nbsp; 5 Jul · Mexico City</small>
+        <div class="team" id="octavo6a" onclick="seleccionarEquipo(this)" data-match="o6" data-target="cuarto3b">Seleccionar</div>
+        <div class="team" id="octavo6b" onclick="seleccionarEquipo(this)" data-match="o6" data-target="cuarto3b">Seleccionar</div>
+      </div><br><br><br><br>
+
+      <div class="match">
+        <small>M95 &nbsp; 7 Jul · Atlanta</small>
+        <div class="team" id="octavo7a" onclick="seleccionarEquipo(this)" data-match="o7" data-target="cuarto4a">Seleccionar</div>
+        <div class="team" id="octavo7b" onclick="seleccionarEquipo(this)" data-match="o7" data-target="cuarto4a">Seleccionar</div>
+      </div><br><br><br><br>
+
+      <div class="match">
+        <small>M96 &nbsp; 7 Jul · Vancouver</small>
+        <div class="team" id="octavo8a" onclick="seleccionarEquipo(this)" data-match="o8" data-target="cuarto4b">Seleccionar</div>
+        <div class="team" id="octavo8b" onclick="seleccionarEquipo(this)" data-match="o8" data-target="cuarto4b">Seleccionar</div>
+      </div>
+    </div>
+
+    <!-- DERECHA DIECISEISAVOS -->
+    <div class="round gap-1 right-lines">
+      <div class="round-title">Dieciseisavos</div>
+
+      <div class="match">
+        <small>M76 &nbsp; 29 Jun · Houston</small>
+        <div class="team" onclick="seleccionarEquipo(this)" data-match="p9" data-target="octavo5a" data-name="Brasil" data-flag="https://flagcdn.com/w40/br.png">
+          <span class="flag"><img src="https://flagcdn.com/w40/br.png" class="bandera"></span> Brasil
+        </div>
+        <div class="team" onclick="seleccionarEquipo(this)" data-match="p9" data-target="octavo5a" data-name="Japón" data-flag="https://flagcdn.com/w40/jp.png">
+          <span class="flag"><img src="https://flagcdn.com/w40/jp.png" class="bandera"></span> Japón
+        </div>
+      </div>
+
+      <div class="match">
+        <small>M78 &nbsp; 30 Jun · Arlington</small>
+        <div class="team" onclick="seleccionarEquipo(this)" data-match="p10" data-target="octavo5b" data-name="Costa de Marfil" data-flag="https://flagcdn.com/w40/ci.png">
+          <span class="flag"><img src="https://flagcdn.com/w40/ci.png" class="bandera"></span> Costa de Marfil
+        </div>
+        <div class="team" onclick="seleccionarEquipo(this)" data-match="p10" data-target="octavo5b" data-name="Noruega" data-flag="https://flagcdn.com/w40/no.png">
+          <span class="flag"><img src="https://flagcdn.com/w40/no.png" class="bandera"></span> Noruega
+        </div>
+      </div>
+
+      <div class="match">
+        <small>M79 &nbsp; 30 Jun · Mexico City</small>
+        <div class="team" onclick="seleccionarEquipo(this)" data-match="p11" data-target="octavo6a" data-name="México" data-flag="https://flagcdn.com/w40/mx.png">
+          <span class="flag"><img src="https://flagcdn.com/w40/mx.png" class="bandera"></span> México
+        </div>
+        <div class="team" onclick="seleccionarEquipo(this)" data-match="p11" data-target="octavo6a" data-name="Ecuador" data-flag="https://flagcdn.com/w40/ec.png">
+          <span class="flag"><img src="https://flagcdn.com/w40/ec.png" class="bandera"></span> Ecuador
+        </div>
+      </div>
+
+      <div class="match">
+        <small>M80 &nbsp; 1 Jul · Atlanta</small>
+        <div class="team" onclick="seleccionarEquipo(this)" data-match="p12" data-target="octavo6b" data-name="Inglaterra" data-flag="https://flagcdn.com/w40/gb-eng.png">
+          <span class="flag"><img src="https://flagcdn.com/w40/gb-eng.png" class="bandera"></span> Inglaterra
+        </div>
+        <div class="team" onclick="seleccionarEquipo(this)" data-match="p12" data-target="octavo6b" data-name="RD Congo" data-flag="https://flagcdn.com/w40/cd.png">
+          <span class="flag"><img src="https://flagcdn.com/w40/cd.png" class="bandera"></span> RD Congo
+        </div>
+      </div>
+
+      <div class="match">
+        <small>M86 &nbsp; 3 Jul · Miami Gardens</small>
+        <div class="team" onclick="seleccionarEquipo(this)" data-match="p13" data-target="octavo7a" data-name="Argentina" data-flag="https://flagcdn.com/w40/ar.png">
+          <span class="flag"><img src="https://flagcdn.com/w40/ar.png" class="bandera"></span> Argentina
+        </div>
+        <div class="team" onclick="seleccionarEquipo(this)" data-match="p13" data-target="octavo7a" data-name="Cabo Verde" data-flag="https://flagcdn.com/w40/cv.png">
+          <span class="flag"><img src="https://flagcdn.com/w40/cv.png" class="bandera"></span> Cabo Verde
+        </div>
+      </div>
+
+      <div class="match">
+        <small>M88 &nbsp; 3 Jul · Arlington</small>
+        <div class="team" onclick="seleccionarEquipo(this)" data-match="p14" data-target="octavo7b" data-name="Australia" data-flag="https://flagcdn.com/w40/au.png">
+          <span class="flag"><img src="https://flagcdn.com/w40/au.png" class="bandera"></span> Australia
+        </div>
+        <div class="team" onclick="seleccionarEquipo(this)" data-match="p14" data-target="octavo7b" data-name="Egipto" data-flag="https://flagcdn.com/w40/eg.png">
+          <span class="flag"><img src="https://flagcdn.com/w40/eg.png" class="bandera"></span> Egipto
+        </div>
+      </div>
+
+      <div class="match">
+        <small>M85 &nbsp; 2 Jul · Vancouver</small>
+        <div class="team" onclick="seleccionarEquipo(this)" data-match="p15" data-target="octavo8a" data-name="Suiza" data-flag="https://flagcdn.com/w40/ch.png">
+          <span class="flag"><img src="https://flagcdn.com/w40/ch.png" class="bandera"></span> Suiza
+        </div>
+        <div class="team" onclick="seleccionarEquipo(this)" data-match="p15" data-target="octavo8a" data-name="Irán" data-flag="https://flagcdn.com/w40/ir.png">
+          <span class="flag"><img src="https://flagcdn.com/w40/dz.png" class="bandera"></span> Argelia
+        </div>
+      </div>
+
+      <div class="match">
+        <small>M87 &nbsp; 3 Jul · Kansas City</small>
+        <div class="team" onclick="seleccionarEquipo(this)" data-match="p16" data-target="octavo8b" data-name="Colombia" data-flag="https://flagcdn.com/w40/co.png">
+          <span class="flag"><img src="https://flagcdn.com/w40/co.png" class="bandera"></span> Colombia
+        </div>
+        <div class="team" onclick="seleccionarEquipo(this)" data-match="p16" data-target="octavo8b" data-name="Ghana" data-flag="https://flagcdn.com/w40/gh.png">
+          <span class="flag"><img src="https://flagcdn.com/w40/gh.png" class="bandera"></span> Ghana
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    /*
+      IMPORTANTE:
+      1) Pegue aquí la URL de su Apps Script, la URL debe terminar en /exec.
+      2) Ejemplo:
+         const URL_GOOGLE_SHEET = "https://script.google.com/macros/s/AKfycbxxxx/exec";
+    */
+    const URL_GOOGLE_SHEET = "https://script.google.com/macros/s/AKfycbxs9QCnG5f4QXJn-vApKty2zqEfDOZrjiUZ_4g7S5sviFmUYxHxt2Xz0_Mmtyy3UAKj/exec";
+
+    const CLAVE_GUARDADO = "llave_torneo_guardado_unica_vez";
+
+    window.addEventListener("load", function () {
+      revisarSiYaGuardo();
+    });
+
+    function seleccionarEquipo(equipo) {
+      let nombre = equipo.dataset.name;
+      let bandera = equipo.dataset.flag;
+      let partido = equipo.dataset.match;
+      let destino = equipo.dataset.target;
+
+      if (!nombre || !bandera) {
+        alert("Primero selecciona un equipo de la ronda anterior.");
+        return;
+      }
+
+      document.querySelectorAll(`[data-match="${partido}"]`).forEach(item => {
+        item.classList.remove("seleccionado");
+      });
+
+      equipo.classList.add("seleccionado");
+
+      let cuadroDestino = document.getElementById(destino);
+
+      cuadroDestino.innerHTML = `
+        <span class="flag">
+          <img src="${bandera}" class="bandera">
+        </span>
+        ${nombre}
+      `;
+
+      cuadroDestino.dataset.name = nombre;
+      cuadroDestino.dataset.flag = bandera;
+    }
+
+    function obtenerEquipo(id) {
+      const elemento = document.getElementById(id);
+
+      if (!elemento) {
+        return "";
+      }
+
+      if (elemento.dataset.name) {
+        return elemento.dataset.name.trim();
+      }
+
+      let texto = elemento.textContent.trim();
+
+      if (texto === "Seleccionar") {
+        return "";
+      }
+
+      return texto;
+    }
+
+    function validarNombreCompleto(nombre) {
+      const partes = nombre.trim().split(/\s+/);
+      return partes.length >= 2;
+    }
+
+    function revisarSiYaGuardo() {
+      const yaGuardo = localStorage.getItem(CLAVE_GUARDADO);
+      const boton = document.getElementById("btnGuardar");
+      const mensaje = document.getElementById("mensajeGuardar");
+
+      if (yaGuardo === "SI") {
+        boton.disabled = true;
+        boton.innerHTML = "Ya fue guardado";
+        mensaje.style.color = "#f7c600";
+        mensaje.innerHTML = "Esta llave ya fue guardada desde este navegador. Solo se permite guardar una vez. Para más información, contacte con Christian Llave.";
+      }
+    }
+
+    function bloquearGuardadoDefinitivo() {
+      localStorage.setItem(CLAVE_GUARDADO, "SI");
+
+      const boton = document.getElementById("btnGuardar");
+      boton.disabled = true;
+      boton.innerHTML = "Ya fue guardado";
+    }
+
+    function guardarEnGoogleSheet() {
+      const mensaje = document.getElementById("mensajeGuardar");
+      const boton = document.getElementById("btnGuardar");
+      const nombreCompleto = document.getElementById("nombreCompleto").value.trim();
+
+      if (localStorage.getItem(CLAVE_GUARDADO) === "SI") {
+        mensaje.style.color = "#f7c600";
+        mensaje.innerHTML = "Ya guardaste esta información. Solo se permite guardar una vez.";
+        return;
+      }
+
+      if (URL_GOOGLE_SHEET === "PEGA_AQUI_TU_URL_DE_APPS_SCRIPT") {
+        mensaje.style.color = "#ff7070";
+        mensaje.innerHTML = "Primero debe pegar la URL de Apps Script en la variable URL_GOOGLE_SHEET.";
+        return;
+      }
+
+      if (nombreCompleto === "") {
+        mensaje.style.color = "#ff7070";
+        mensaje.innerHTML = "Debe ingresar su nombre completo.";
+        return;
+      }
+
+      if (!validarNombreCompleto(nombreCompleto)) {
+        mensaje.style.color = "#ff7070";
+        mensaje.innerHTML = "Escriba nombre y apellido como mínimo.";
+        return;
+      }
+
+      const campeon = obtenerEquipo("campeon");
+
+      if (campeon === "") {
+        mensaje.style.color = "#ff7070";
+        mensaje.innerHTML = "Debe seleccionar todos los ganadores hasta elegir el campeón.";
+        return;
+      }
+
+      const datos = {
+        fechaRegistro: new Date().toLocaleString(),
+        nombreCompleto: nombreCompleto,
+
+        octavo1a: obtenerEquipo("octavo1a"),
+        octavo1b: obtenerEquipo("octavo1b"),
+        octavo2a: obtenerEquipo("octavo2a"),
+        octavo2b: obtenerEquipo("octavo2b"),
+        octavo3a: obtenerEquipo("octavo3a"),
+        octavo3b: obtenerEquipo("octavo3b"),
+        octavo4a: obtenerEquipo("octavo4a"),
+        octavo4b: obtenerEquipo("octavo4b"),
+
+        octavo5a: obtenerEquipo("octavo5a"),
+        octavo5b: obtenerEquipo("octavo5b"),
+        octavo6a: obtenerEquipo("octavo6a"),
+        octavo6b: obtenerEquipo("octavo6b"),
+        octavo7a: obtenerEquipo("octavo7a"),
+        octavo7b: obtenerEquipo("octavo7b"),
+        octavo8a: obtenerEquipo("octavo8a"),
+        octavo8b: obtenerEquipo("octavo8b"),
+
+        cuarto1a: obtenerEquipo("cuarto1a"),
+        cuarto1b: obtenerEquipo("cuarto1b"),
+        cuarto2a: obtenerEquipo("cuarto2a"),
+        cuarto2b: obtenerEquipo("cuarto2b"),
+        cuarto3a: obtenerEquipo("cuarto3a"),
+        cuarto3b: obtenerEquipo("cuarto3b"),
+        cuarto4a: obtenerEquipo("cuarto4a"),
+        cuarto4b: obtenerEquipo("cuarto4b"),
+
+        semi1a: obtenerEquipo("semi1a"),
+        semi1b: obtenerEquipo("semi1b"),
+        semi2a: obtenerEquipo("semi2a"),
+        semi2b: obtenerEquipo("semi2b"),
+
+        finalA: obtenerEquipo("finalA"),
+        finalB: obtenerEquipo("finalB"),
+        campeon: campeon
+      };
+
+      boton.disabled = true;
+      boton.innerHTML = "Guardando...";
+      mensaje.style.color = "#f7c600";
+      mensaje.innerHTML = "Guardando información...";
+
+      fetch(URL_GOOGLE_SHEET, {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8"
+        },
+        body: JSON.stringify(datos)
+      })
+      .then(function () {
+        bloquearGuardadoDefinitivo();
+        mensaje.style.color = "#5ff199";
+        mensaje.innerHTML = "Información enviada a Google Sheet correctamente. Solo se guardará una vez.";
+      })
+      .catch(function () {
+        boton.disabled = false;
+        boton.innerHTML = "Guardar en Google Sheet";
+        mensaje.style.color = "#ff7070";
+        mensaje.innerHTML = "No se pudo guardar. Revise la URL de Apps Script y la conexión.";
+      });
+    }
+  </script>
+
+
+  <footer class="pie">
+    <div class="pie-contenido">
+      <p class="empresa">© 2026 Inmobiliaria Virgen del Socavón S.R.L.</p>
+      <p class="autor">Desarrollado por <span>Christian Llave</span></p>
+    </div>
+  </footer>
+
+</body>
+</html>
